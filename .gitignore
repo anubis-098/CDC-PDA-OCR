@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+*.db
+sample/
+uploads/
+.DS_Store
+fixtures/generated/
+pda-local-root.crt
+.npm-cache/

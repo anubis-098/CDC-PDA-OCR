@@ -1,0 +1,12 @@
+{$SITE_ADDRESS:localhost} {
+    tls {$TLS_MODE:internal}
+    request_body {
+        max_size 22MB
+    }
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        Permissions-Policy "camera=(self)"
+    }
+    reverse_proxy web:80
+}
