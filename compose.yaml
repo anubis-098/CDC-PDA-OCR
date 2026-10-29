@@ -37,7 +37,8 @@ services:
   web:
     build: ./frontend
     ports:
-      - '127.0.0.1:${DEV_PORT:-3000}:80'
+      # Expose the dev web port to the internal LAN (for example PDA -> 10.84.194.51:3000).
+      - '${DEV_PORT:-3000}:80'
     depends_on:
       api:
         condition: service_healthy
