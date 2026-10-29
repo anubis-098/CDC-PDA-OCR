@@ -15,7 +15,7 @@ docker compose up --build
 
 เปิด `https://localhost` บนเครื่องเซิร์ฟเวอร์ ค่าเริ่มต้นใช้ใบรับรองจาก Caddy local CA ต้องติดตั้ง CA ให้เบราว์เซอร์เชื่อถือก่อนใช้งานกล้อง ไม่ใช่เพียงข้ามหน้าคำเตือน certificate
 
-สำหรับพัฒนาบนเครื่องนี้ เปิด `http://localhost:8080` ได้โดยตรง (`8080` → พอร์ต `80` ของ web container) และใช้ API ผ่าน `http://localhost:8080/api` พอร์ตนี้เปิดบน network interface ของเครื่องเพื่อให้ PDA ใน Internal LAN เข้าได้ เช่น `http://10.84.194.51:8080` การเปิดกล้องจาก PDA ผ่าน HTTP อาจถูก browser บล็อกเพราะต้องใช้ secure context; ให้ใช้ HTTPS ผ่าน gateway ตามขั้นตอนด้านล่างเมื่อทดสอบกล้อง
+สำหรับพัฒนาบนเครื่องนี้ เปิด `http://localhost:3000` ได้โดยตรง (`3000` → พอร์ต `80` ของ web container) และใช้ API ผ่าน `http://localhost:3000/api` พอร์ตนี้เปิดบน network interface ของเครื่องเพื่อให้ PDA ใน Internal LAN เข้าได้ เช่น `http://10.84.194.51:3000` การเปิดกล้องจาก PDA ผ่าน HTTP อาจถูก browser บล็อกเพราะต้องใช้ secure context; ให้ใช้ HTTPS ผ่าน gateway ตามขั้นตอนด้านล่างเมื่อทดสอบกล้อง
 
 เว็บใน Docker เสิร์ฟไฟล์ที่ build แล้ว หลังแก้โค้ดใช้ `docker compose up -d --build --no-deps web` เพื่ออัปเดตหน้าเว็บ
 
