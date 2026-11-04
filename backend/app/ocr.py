@@ -37,8 +37,11 @@ class PaddleEngine:
                                          text_recognition_model_name=recognition_model,
                                          text_det_limit_side_len=1280, text_det_limit_type="max",
                                          device="cpu", enable_mkldnn=False, cpu_threads=4,
-                                         use_doc_orientation_classify=False,
-                                         use_doc_unwarping=False, use_textline_orientation=False)
+                                         # Keep document and text-line orientation enabled so
+                                         # landscape photos and rotated horizontal rows are read
+                                         # in their correct direction.
+                                         use_doc_orientation_classify=True,
+                                         use_doc_unwarping=False, use_textline_orientation=True)
             lines = []
             for page_number, page in enumerate(pages, 1):
                 # Paddle takes BGR ndarray input.
