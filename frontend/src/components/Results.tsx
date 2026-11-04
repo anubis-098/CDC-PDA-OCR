@@ -70,7 +70,11 @@ function OCRPreview({ file, document }: { file?: File; document: Comparison['doc
         const left = Math.max(0, Math.min(...xs)); const top = Math.max(0, Math.min(...ys)); const right = Math.min(size.width, Math.max(...xs)); const bottom = Math.min(size.height, Math.max(...ys))
         if (right <= left || bottom <= top) return null
         const kind = classify(line)
-        return <span key={`${line.page}-${index}`} className={`ocr-label ${kind}`} title={`${line.text} · ${Math.round(line.confidence * 100)}%`} style={{ left: `${left / size.width * 100}%`, top: `${top / size.height * 100}%`, width: `${(right - left) / size.width * 100}%`, height: `${(bottom - top) / size.height * 100}%` }}>{line.text}</span>
+        const first = line.box[0]; const second = line.box[1]
+        let angle = Math.atan2(second[1] - first[1], second[0] - first[0]) * 180 / Math.PI
+        if (angle > 90) angle -= 180
+        if (angle < -90) angle += 180
+        return <span key={`${line.page}-${index}`} className={`ocr-label ${kind}`} title={`${line.text} · ${Math.round(line.confidence * 100)}%`} style={{ left: `${left / size.width * 100}%`, top: `${top / size.height * 100}%`, width: `${(right - left) / size.width * 100}%`, height: `${(bottom - top) / size.height * 100}%`, transform: `rotate(${angle}deg)`, transformOrigin: 'left top' }}>{line.text}</span>
       })}</div>}
   </>
   return <section className="ocr-preview card"><h3 className="font-bold">{titles[document.kind]}</h3>

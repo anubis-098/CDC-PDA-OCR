@@ -98,7 +98,7 @@
   .ocr-zoom-trigger { display: block; min-height: 0; padding: 0; border: 0; border-radius: 8px; background: transparent; color: inherit; text-align: left; cursor: zoom-in; }
   .ocr-zoom-trigger:hover:not(:disabled) { background: transparent; }
   .ocr-label-layer { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
-  .ocr-label { position: absolute; z-index: 2; display: block; overflow: visible; border: 2px solid currentColor; padding: 1px 3px; font: 700 clamp(9px, 2.6vw, 14px)/1.2 Sarabun, Arial, sans-serif; white-space: normal; overflow-wrap: anywhere; text-shadow: 0 1px 0 #fff; box-shadow: 0 0 0 1px #ffffffaa; }
+  .ocr-label { position: absolute; z-index: 2; display: block; overflow: visible; border: 2px solid currentColor; padding: 1px 3px; font: 700 clamp(9px, 2.6vw, 14px)/1.2 Sarabun, Arial, sans-serif; white-space: normal; overflow-wrap: anywhere; text-shadow: 0 1px 0 #fff; box-shadow: 0 0 0 1px #ffffffaa; transform-origin: left top; }
   .ocr-label.green { color: #087a35; background: #fffffff2; }
   .ocr-label.red { color: #8b1e1e; background: #fffffff2; }
   .ocr-zoom-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 56px 12px 12px; background: #101820ed; }
