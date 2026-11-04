@@ -10,6 +10,10 @@ class Settings(BaseSettings):
     upload_dir: Path = Path("/data/uploads")
     # PP-OCRv5 Thai recognizer supports Thai, English, and digits in one fast pass.
     ocr_lang: str = "th"
+    # Landscape pages are supported without orientation models. Enable this only
+    # when source pages can arrive rotated or sideways; it adds CPU inference time.
+    ocr_orientation: bool = False
+    ocr_cpu_threads: int = Field(default=4, ge=1, le=32)
     min_confidence: float = Field(default=0.85, ge=0, le=1)
     max_file_bytes: int = 10 * 1024 * 1024
     max_pages: int = 5

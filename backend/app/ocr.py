@@ -36,12 +36,14 @@ class PaddleEngine:
                 self._engine = PaddleOCR(text_detection_model_name="PP-OCRv5_mobile_det",
                                          text_recognition_model_name=recognition_model,
                                          text_det_limit_side_len=1280, text_det_limit_type="max",
-                                         device="cpu", enable_mkldnn=False, cpu_threads=4,
-                                         # Keep document and text-line orientation enabled so
-                                         # landscape photos and rotated horizontal rows are read
-                                         # in their correct direction.
-                                         use_doc_orientation_classify=True,
-                                         use_doc_unwarping=False, use_textline_orientation=True)
+                                         device="cpu", enable_mkldnn=False,
+                                         cpu_threads=settings().ocr_cpu_threads,
+                                         # Landscape pages work in the normal detector path.
+                                         # Optional orientation models are slower and are only
+                                         # needed when pages or text lines may be rotated.
+                                         use_doc_orientation_classify=settings().ocr_orientation,
+                                         use_doc_unwarping=False,
+                                         use_textline_orientation=settings().ocr_orientation)
             lines = []
             for page_number, page in enumerate(pages, 1):
                 # Paddle takes BGR ndarray input.

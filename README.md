@@ -1,5 +1,7 @@
 # ตรวจรับ · PDA Document Check
 
+> **Local-first / Performance remark:** ระบบนี้ตั้งใจให้ OCR ทำงานบน PC เครื่องเดียวกับ Docker และสแกนเนอร์ภายในเครือข่าย ไม่ส่งภาพไปบริการ OCR ภายนอก เว็บจึงเน้นการตอบสนองบน PDA และความเร็วในการส่งภาพมากกว่าการตกแต่งภาพหน้าเว็บ
+
 MVP สำหรับเทียบ Checking Sheet กับ Invoice บน PDA Zebra Android ตาม [start.md](start.md): React + TypeScript + Vite + Tailwind, FastAPI, PaddleOCR CPU, PostgreSQL และ Docker Compose
 
 **สถานะ:** Docker Compose และ frontend build ผ่านแล้ว ชุดทดสอบ backend ผ่าน 25 ข้อ ยังไม่ได้ทดสอบบน PDA จริง ดูผลตรวจ OCR และรายละเอียดล่าสุดใน [docs/verification.md](docs/verification.md)
@@ -60,7 +62,7 @@ MVP นี้ยังไม่มี login/สิทธิ์รายผู้
 - เลือก JPG/JPEG/PNG/PDF ได้ ตรวจไฟล์จากเนื้อหาจริง ไม่เชื่อ MIME/นามสกุลเพียงอย่างเดียว
 - จำกัด 10 MB ต่อไฟล์, ภาพ 25 ล้านพิกเซล, PDF 1–5 หน้า ไม่รับ PDF เข้ารหัสหรือภาพเคลื่อนไหว; proxy จำกัด request รวม 22 MB
 - หมุนภาพตาม EXIF และลดด้านยาวสูงสุด 2,400 px; PDF render เป็น RGB ก่อน OCR
-- PaddleOCR แบบ CPU ใช้ PP-OCRv5 ภาษาไทย (`OCR_LANG=th`; explicitly selects the Thai PP-OCRv5 mobile recognizer, which also recognizes English and digits in one pass) พร้อม confidence, page และ polygon; ใช้ mobile detector จำกัดด้านตรวจจับ 1,280 px และปิดตัวจำแนกทิศทาง/แก้ภาพเอียงเพื่อลดเวลาประมวลผลสำหรับเอกสารที่ถ่ายตรง
+- PaddleOCR แบบ CPU ใช้ PP-OCRv5 ภาษาไทย (`OCR_LANG=th`; explicitly selects the Thai PP-OCRv5 mobile recognizer, which also recognizes English and digits in one pass) พร้อม confidence, page และ polygon; ใช้ mobile detector จำกัดด้านตรวจจับ 1,280 px และปิด orientation models เป็นค่าเริ่มต้นเพื่อความเร็ว (`OCR_ORIENTATION=false`) เพราะรองรับภาพแนวนอนได้อยู่แล้ว; เปิด `OCR_ORIENTATION=true` เมื่อเอกสารอาจหมุนหรือข้อความเอียงมาก
 - ถอดรหัสบาร์โค้ดบน Checking Sheet โดยตรงแล้วใช้เป็นเลขอ้างอิง; หากถอดรหัสไม่ได้จะใช้ `ASN No.` / `SN No.` จาก OCR เป็นทางสำรอง และเลือกจำนวนจาก `Quantity Plan (CS)`
 - ตัวอ่านบาร์โค้ดรองรับ Code 39 และตรวจหารูปแบบบาร์โค้ดที่อ่านได้ในภาพโดยอัตโนมัติ
 - หาก OCR รวม `Plan (CS)`, `Rec (CS)`, `Plan (MU)` และ `Rec (MU)` เป็นหัวข้อเดียว จะ OCR ซ้ำเฉพาะช่อง `Quantity Plan (CS)` แบบขยายภาพ เพื่อไม่เอาจำนวนจากคอลัมน์ MU มาแทน CS
