@@ -66,15 +66,16 @@ function OCRPreview({ file, document }: { file?: File; document: Comparison['doc
   const overlay = image && <>
     <img src={image} alt={`ภาพ ${titles[document.kind]} พร้อมตำแหน่งข้อความ OCR`} onLoad={event => setSize({ width: event.currentTarget.naturalWidth, height: event.currentTarget.naturalHeight })} />
     {size.width > 0 && <div className="ocr-label-layer">{marks.map((line, index) => {
-        const xs = line.box.map(point => point[0]); const ys = line.box.map(point => point[1])
-        const left = Math.max(0, Math.min(...xs)); const top = Math.max(0, Math.min(...ys)); const right = Math.min(size.width, Math.max(...xs)); const bottom = Math.min(size.height, Math.max(...ys))
-        if (right <= left || bottom <= top) return null
+        const [origin, topRight, , bottomLeft] = line.box
+        const left = Math.max(0, Math.min(size.width, origin[0])); const top = Math.max(0, Math.min(size.height, origin[1]))
+        const boxWidth = Math.hypot(topRight[0] - origin[0], topRight[1] - origin[1])
+        const boxHeight = Math.hypot(bottomLeft[0] - origin[0], bottomLeft[1] - origin[1])
+        if (boxWidth <= 0 || boxHeight <= 0) return null
         const kind = classify(line)
-        const first = line.box[0]; const second = line.box[1]
-        let angle = Math.atan2(second[1] - first[1], second[0] - first[0]) * 180 / Math.PI
+        let angle = Math.atan2(topRight[1] - origin[1], topRight[0] - origin[0]) * 180 / Math.PI
         if (angle > 90) angle -= 180
         if (angle < -90) angle += 180
-        return <span key={`${line.page}-${index}`} className={`ocr-label ${kind}`} title={`${line.text} · ${Math.round(line.confidence * 100)}%`} style={{ left: `${left / size.width * 100}%`, top: `${top / size.height * 100}%`, width: `${(right - left) / size.width * 100}%`, height: `${(bottom - top) / size.height * 100}%`, transform: `rotate(${angle}deg)`, transformOrigin: 'left top' }}>{line.text}</span>
+        return <span key={`${line.page}-${index}`} className={`ocr-label ${kind}`} title={`${line.text} · ${Math.round(line.confidence * 100)}%`} style={{ left: `${left / size.width * 100}%`, top: `${top / size.height * 100}%`, width: `${boxWidth / size.width * 100}%`, height: `${boxHeight / size.height * 100}%`, transform: `rotate(${angle}deg)`, transformOrigin: 'left top' }}>{line.text}</span>
       })}</div>}
   </>
   return <section className="ocr-preview card"><h3 className="font-bold">{titles[document.kind]}</h3>
